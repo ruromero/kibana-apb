@@ -1,0 +1,31 @@
+---
+- name: Retrieve Kibana DeploymentConfig
+  openshift_v1_deployment_config:
+    name: '{{ application_name }}'
+    namespace: '{{ namespace }}'
+  register: kibana_dc
+  retries: 40
+  delay: 10
+  ignore_errors: yes
+
+- name: Check Kibana is ready
+  asb_save_test_result:
+    fail: true
+    msg: "Kibana doesn't seem to be ready"
+  when:
+    - kibana_dc.deployment_config.status.ready_replicas != 1
+    - travis is undefined
+
+- name: "Retrieve Service"
+  k8s_v1_service:
+    name: '{{ application_name }}'
+    namespace: '{{ namespace }}'
+  register: service_raw
+
+- name: Query Oauth proxy is enabled and active
+  include_tasks: query_oauth_proxy.yml
+  when: secure
+
+- name: Query Kibana is not secured
+  include_tasks: query_kibana.yml
+  when: not secure

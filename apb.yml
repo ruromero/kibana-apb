@@ -39,7 +39,7 @@ plans:
       default: 6.2.1
       type: enum
       enum: ["6.2.1", "6.1.2", "5.5.2"]
-    - name: secure
+    - name: kibana_secure
       type: boolean
       default: true
       description: Allow access only to OpenShift users having access to the service
@@ -74,7 +74,7 @@ plans:
       default: 6.2.1
       type: enum
       enum: ["6.2.1", "6.1.2", "5.5.2"]
-    - name: secure
+    - name: kibana_secure
       type: boolean
       default: true
       description: Allow access only to OpenShift users having access to the service
